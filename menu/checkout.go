@@ -1,6 +1,7 @@
 package menu
 
 import (
+	"fgo24-weekly-go/module"
 	"fmt"
 	"os"
 )
@@ -8,9 +9,9 @@ import (
 func CheckOut() {
 	fmt.Println("Checkout :")
 	var totalPrice int = 0
-	for i, item := range Cart {
-		fmt.Printf("%d. %s - Rp.%d\n", i+1, item.name, item.price)
-		totalPrice = totalPrice + item.price
+	for i, item := range module.Cart {
+		fmt.Printf("%d. %s - Rp.%d\n", i+1, item.Name, item.Price)
+		totalPrice = totalPrice + item.Price
 	}
 	fmt.Printf("Total Pembayaran : Rp.%d\n", totalPrice)
 	fmt.Println("Terima kasih sudah berbelanja")
