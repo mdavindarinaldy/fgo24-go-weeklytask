@@ -48,7 +48,7 @@ func DessertItem(wg *sync.WaitGroup) {
 	}
 }
 
-func EmptyItem(wg *sync.WaitGroup) {
+func EmptyItemByCategory(wg *sync.WaitGroup) {
 	defer wg.Done()
 	FoodItems = []Item{}
 	DrinkItems = []Item{}
