@@ -9,6 +9,7 @@ import (
 
 func main() {
 	for {
+		fmt.Print("\033[H\033[2J") // clear screen
 		menu.MainMenu()
 		option := utils.GetInputInt("Pilih Menu 1-3: ")
 		if option == 1 {

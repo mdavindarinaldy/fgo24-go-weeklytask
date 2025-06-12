@@ -9,6 +9,7 @@ import (
 
 func MenuCustomer() {
 	for {
+		fmt.Print("\033[H\033[2J")
 		wait := sync.WaitGroup{}
 		wait.Add(2)
 		go module.EmptyItemByCategory(&wait)
@@ -53,6 +54,7 @@ func MenuByCategory() {
 	wait.Wait()
 
 	for {
+		fmt.Print("\033[H\033[2J")
 		fmt.Println("Menu Berdasarkan Kategori :")
 		fmt.Println("1. Menu Makanan")
 		fmt.Println("2. Menu Minuman")
@@ -85,6 +87,7 @@ func MenuByOrigin() {
 	wait.Wait()
 
 	for {
+		fmt.Print("\033[H\033[2J")
 		fmt.Println("Menu Berdasarkan Tipe Hidangan :")
 		fmt.Println("1. Hidangan Nusantara")
 		fmt.Println("2. Hidangan Western")
@@ -106,6 +109,7 @@ func MenuByOrigin() {
 }
 
 func FoodsMenu() {
+	fmt.Print("\033[H\033[2J")
 	fmt.Println("Menu Makanan :")
 	len := len(module.FoodItems)
 	for i, item := range module.FoodItems {
@@ -124,6 +128,7 @@ func FoodsMenu() {
 }
 
 func DrinksMenu() {
+	fmt.Print("\033[H\033[2J")
 	fmt.Println("Menu Minuman :")
 	len := len(module.DrinkItems)
 	for i, item := range module.DrinkItems {
@@ -142,6 +147,7 @@ func DrinksMenu() {
 }
 
 func SnacksMenu() {
+	fmt.Print("\033[H\033[2J")
 	fmt.Println("Menu Snacks :")
 	len := len(module.SnackItems)
 	for i, item := range module.SnackItems {
@@ -160,6 +166,7 @@ func SnacksMenu() {
 }
 
 func DessertsMenu() {
+	fmt.Print("\033[H\033[2J")
 	fmt.Println("Menu Desserts :")
 	len := len(module.DessertItems)
 	for i, item := range module.DessertItems {
@@ -178,6 +185,7 @@ func DessertsMenu() {
 }
 
 func NusantaraMenu() {
+	fmt.Print("\033[H\033[2J")
 	fmt.Println("Hidangan Nusantara :")
 	len := len(module.NusantaraItems)
 	for i, item := range module.NusantaraItems {
@@ -196,6 +204,7 @@ func NusantaraMenu() {
 }
 
 func WesternMenu() {
+	fmt.Print("\033[H\033[2J")
 	fmt.Println("Hidangan Nusantara :")
 	len := len(module.WesternItems)
 	for i, item := range module.WesternItems {
@@ -214,6 +223,7 @@ func WesternMenu() {
 }
 
 func JapaneseMenu() {
+	fmt.Print("\033[H\033[2J")
 	fmt.Println("Hidangan Nusantara :")
 	len := len(module.JapaneseItems)
 	for i, item := range module.JapaneseItems {
