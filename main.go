@@ -5,6 +5,7 @@ import (
 	"fgo24-weekly-go/utils"
 	"fmt"
 	"os"
+	"time"
 )
 
 func main() {
@@ -17,7 +18,8 @@ func main() {
 		} else if option == 2 {
 			fmt.Println("Menu Admin")
 		} else if option == 3 {
-			fmt.Println("Program Diakhiri!")
+			fmt.Print("\n[ !!! PROGRAM DIAKHIRI !!! ]\n\n")
+			time.Sleep(2 * time.Second)
 			os.Exit(0)
 		} else {
 			utils.InvalidInput()

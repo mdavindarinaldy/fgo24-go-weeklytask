@@ -15,7 +15,7 @@ func MenuCustomer() {
 		go module.EmptyItemByCategory(&wait)
 		go module.EmptyItemByOrigin(&wait)
 		wait.Wait()
-		fmt.Print("\n----------MENU UTAMA----------\n")
+		fmt.Println("----------MENU UTAMA----------")
 		fmt.Println("1. Lihat menu berdasarkan kategori")
 		fmt.Println("2. Lihat menu berdasarkan tipe hidangan")
 		fmt.Println("3. Lihat menu berdasarkan harga terrendah")
