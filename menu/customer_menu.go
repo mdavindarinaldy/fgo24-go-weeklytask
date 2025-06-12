@@ -9,6 +9,10 @@ import (
 
 func MenuCustomer() {
 	for {
+		wait := sync.WaitGroup{}
+		wait.Add(1)
+		go module.EmptyItem(&wait)
+		wait.Wait()
 		fmt.Print("\n----------MENU UTAMA----------\n")
 		fmt.Println("1. Lihat menu berdasarkan kategori")
 		fmt.Println("2. Lihat menu berdasarkan tipe hidangan")
@@ -47,27 +51,29 @@ func MenuByCategory() {
 	go module.DessertItem(&wait)
 	wait.Wait()
 
-	fmt.Println("Menu Berdasarkan Kategori :")
-	fmt.Println("1. Menu Makanan")
-	fmt.Println("2. Menu Minuman")
-	fmt.Println("3. Menu Makanan Ringan")
-	fmt.Println("4. Menu Desserts")
-	fmt.Println("5. Kembali ke Menu Utama")
-	option := utils.GetInputInt("Silakan pilih menu [1-5] : ")
-	if option == 1 {
-		FoodsMenu()
-	}
-	if option == 2 {
-		DrinksMenu()
-	}
-	if option == 3 {
-		SnacksMenu()
-	}
-	if option == 4 {
-		DessertsMenu()
-	}
-	if option == 5 {
-		return
+	for {
+		fmt.Println("Menu Berdasarkan Kategori :")
+		fmt.Println("1. Menu Makanan")
+		fmt.Println("2. Menu Minuman")
+		fmt.Println("3. Menu Makanan Ringan")
+		fmt.Println("4. Menu Desserts")
+		fmt.Println("5. Kembali ke Menu Utama")
+		option := utils.GetInputInt("Silakan pilih menu [1-5] : ")
+		if option == 1 {
+			FoodsMenu()
+		}
+		if option == 2 {
+			DrinksMenu()
+		}
+		if option == 3 {
+			SnacksMenu()
+		}
+		if option == 4 {
+			DessertsMenu()
+		}
+		if option == 5 {
+			return
+		}
 	}
 }
 
@@ -76,7 +82,7 @@ func FoodsMenu() {
 	for i, item := range module.FoodItems {
 		fmt.Printf("%d. %s : Rp.%d\n", i+1, item.Name, item.Price)
 	}
-	fmt.Println("5. Kembali ke Menu Utama")
+	fmt.Println("5. Kembali ke Menu Sebelumnya")
 	option := utils.GetInputInt("Silakan pilih menu [1-5] : ")
 	if option < 1 || option > 5 {
 		fmt.Println("Input tidak valid! Silakan coba lagi")

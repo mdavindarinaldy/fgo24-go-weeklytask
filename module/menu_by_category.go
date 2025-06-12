@@ -1,6 +1,8 @@
 package module
 
-import "sync"
+import (
+	"sync"
+)
 
 var FoodItems []Item = []Item{}
 
@@ -44,4 +46,12 @@ func DessertItem(wg *sync.WaitGroup) {
 			DessertItems = append(DessertItems, item)
 		}
 	}
+}
+
+func EmptyItem(wg *sync.WaitGroup) {
+	defer wg.Done()
+	FoodItems = []Item{}
+	DrinkItems = []Item{}
+	SnackItems = []Item{}
+	DessertItems = []Item{}
 }
