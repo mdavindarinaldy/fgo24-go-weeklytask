@@ -15,15 +15,18 @@ func MenuAdmin() {
 		fmt.Println("1. Tambah menu baru")
 		fmt.Println("2. Hapus menu")
 		fmt.Println("3. Rangkuman transaksi")
-		fmt.Println("4. Logout")
-		option := utils.GetInputInt("Silakan pilih menu [1-4] : ")
+		fmt.Println("4. Lihat semua item menu")
+		fmt.Println("5. Logout")
+		option := utils.GetInputInt("Silakan pilih menu [1-5] : ")
 		if option == 1 {
 			AddItemMenu()
 		} else if option == 2 {
 			fmt.Println("hapus menu")
 		} else if option == 3 {
-			fmt.Println("tampilkan transaksi")
+			DisplayTransactions()
 		} else if option == 4 {
+			DisplayAllItems()
+		} else if option == 5 {
 			return
 		} else {
 			utils.InvalidInput()
@@ -75,9 +78,42 @@ func RemoveItemMenu() {
 }
 
 func DisplayTransactions() {
-
+	fmt.Print("\033[H\033[2J")
+	if len(module.Transactions) == 0 {
+		fmt.Println("Belum ada transaksi!")
+		fmt.Printf("\n[DIKEMBALIKAN KE MENU UTAMA]\n\n")
+		time.Sleep(2 * time.Second)
+		MenuCustomer()
+	}
+	module.SortTransactions()
+	fmt.Printf("Total Transaksi : %d\n\n", len(module.Transactions))
+	fmt.Println("Rangkuman transaksi : ")
+	for i, item := range module.SummaryTransactions {
+		fmt.Printf("%d. %s: \n", i+1, item.Name)
+		fmt.Printf("-- Dipesan pelanggan sebanyak %d kali\n", item.Order)
+		fmt.Printf("-- Total pembelian %d kali\n", item.Price*item.Order)
+	}
+	opt := utils.GetInputInt("\nPilih 1 untuk kembali ke menu utama : ")
+	if opt == 1 {
+		return
+	} else {
+		utils.InvalidInput()
+		DisplayTransactions()
+	}
 }
 
 func DisplayAllItems() {
-
+	fmt.Print("\033[H\033[2J")
+	fmt.Printf("Total Item : %d\n\n", len(module.Items))
+	fmt.Println("List semua item menu :")
+	for i, item := range module.Items {
+		fmt.Printf("%d. %s -- %s: Rp.%d\n", i+1, item.Name, item.Origin, item.Price)
+	}
+	opt := utils.GetInputInt("\nPilih 1 untuk kembali ke menu utama : ")
+	if opt == 1 {
+		return
+	} else {
+		utils.InvalidInput()
+		DisplayAllItems()
+	}
 }
