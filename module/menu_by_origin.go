@@ -9,7 +9,7 @@ var JapaneseItems []Item = []Item{}
 func NusantaraItem(wg *sync.WaitGroup) {
 	defer wg.Done()
 	for _, item := range Items {
-		if item.Origin == "Nusantara" {
+		if item.Origin == "nusantara" {
 			NusantaraItems = append(NusantaraItems, item)
 		}
 	}
@@ -18,7 +18,7 @@ func NusantaraItem(wg *sync.WaitGroup) {
 func WesternItem(wg *sync.WaitGroup) {
 	defer wg.Done()
 	for _, item := range Items {
-		if item.Origin == "Western" {
+		if item.Origin == "western" {
 			WesternItems = append(WesternItems, item)
 		}
 	}
@@ -27,7 +27,7 @@ func WesternItem(wg *sync.WaitGroup) {
 func JapaneseItem(wg *sync.WaitGroup) {
 	defer wg.Done()
 	for _, item := range Items {
-		if item.Origin == "Japanese" {
+		if item.Origin == "japanese" {
 			JapaneseItems = append(JapaneseItems, item)
 		}
 	}

@@ -1,5 +1,7 @@
 package module
 
+import "strings"
+
 type Item struct {
 	Name     string
 	Price    int
@@ -11,86 +13,95 @@ var Items []Item = []Item{
 	{
 		Name:     "Nasi Goreng",
 		Price:    15000,
-		Origin:   "Nusantara",
-		Category: "Food",
+		Origin:   "nusantara",
+		Category: "food",
 	}, {
 		Name:     "Nasi Uduk",
 		Price:    10000,
-		Origin:   "Nusantara",
-		Category: "Food",
+		Origin:   "nusantara",
+		Category: "food",
 	}, {
 		Name:     "Fish and Chips",
 		Price:    18000,
-		Origin:   "Western",
-		Category: "Food",
+		Origin:   "western",
+		Category: "food",
 	}, {
 		Name:     "Sushi",
 		Price:    20000,
-		Origin:   "Japanese",
-		Category: "Food",
+		Origin:   "japanese",
+		Category: "food",
 	}, {
 		Name:     "Es Dawet",
 		Price:    9000,
-		Origin:   "Nusantara",
-		Category: "Drink",
+		Origin:   "nusantara",
+		Category: "drink",
 	}, {
 		Name:     "Cherry Blossom Tea",
 		Price:    5000,
-		Origin:   "Japanese",
-		Category: "Drink",
+		Origin:   "japanese",
+		Category: "drink",
 	}, {
 		Name:     "Kombucha",
 		Price:    8000,
-		Origin:   "Japanese",
-		Category: "Drink",
+		Origin:   "japanese",
+		Category: "drink",
 	}, {
 		Name:     "Jasmine Tea in Affogato Latte",
 		Price:    13000,
-		Origin:   "Western",
-		Category: "Drink",
+		Origin:   "western",
+		Category: "drink",
 	}, {
 		Name:     "Mochi",
 		Price:    9000,
-		Origin:   "Japanese",
-		Category: "Snack",
+		Origin:   "japanese",
+		Category: "snack",
 	}, {
 		Name:     "Dango",
 		Price:    10000,
-		Origin:   "Japanese",
-		Category: "Snack",
+		Origin:   "japanese",
+		Category: "snack",
 	}, {
 		Name:     "Pisang Goreng",
 		Price:    5000,
-		Origin:   "Nusantara",
-		Category: "Snack",
+		Origin:   "nusantara",
+		Category: "snack",
 	}, {
 		Name:     "Serabi",
 		Price:    7500,
-		Origin:   "Nusantara",
-		Category: "Snack",
+		Origin:   "nusantara",
+		Category: "snack",
 	}, {
 		Name:     "Cheesecake",
 		Price:    20000,
-		Origin:   "Western",
-		Category: "Dessert",
+		Origin:   "western",
+		Category: "dessert",
 	}, {
 		Name:     "Red Velvet Cake",
 		Price:    22000,
-		Origin:   "Western",
-		Category: "Dessert",
+		Origin:   "western",
+		Category: "dessert",
 	}, {
 		Name:     "Creme Brulee",
 		Price:    18000,
-		Origin:   "Western",
-		Category: "Dessert",
+		Origin:   "western",
+		Category: "dessert",
 	}, {
 		Name:     "Bubur Kacang Ijo",
 		Price:    10000,
-		Origin:   "Nusantara",
-		Category: "Dessert",
+		Origin:   "nusantara",
+		Category: "dessert",
 	},
 }
 
 func AddItem(item Item) {
 	Items = append(Items, item)
+}
+
+func CheckItem(name string) bool {
+	for _, item := range Items {
+		if strings.Contains(strings.ToLower(item.Name), strings.ToLower(name)) {
+			return true
+		}
+	}
+	return false
 }

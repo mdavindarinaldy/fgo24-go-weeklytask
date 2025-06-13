@@ -15,7 +15,7 @@ var DessertItems []Item = []Item{}
 func FoodItem(wg *sync.WaitGroup) {
 	defer wg.Done()
 	for _, item := range Items {
-		if item.Category == "Food" {
+		if item.Category == "food" {
 			FoodItems = append(FoodItems, item)
 		}
 	}
@@ -24,7 +24,7 @@ func FoodItem(wg *sync.WaitGroup) {
 func DrinkItem(wg *sync.WaitGroup) {
 	defer wg.Done()
 	for _, item := range Items {
-		if item.Category == "Drink" {
+		if item.Category == "drink" {
 			DrinkItems = append(DrinkItems, item)
 		}
 	}
@@ -33,7 +33,7 @@ func DrinkItem(wg *sync.WaitGroup) {
 func SnackItem(wg *sync.WaitGroup) {
 	defer wg.Done()
 	for _, item := range Items {
-		if item.Category == "Snack" {
+		if item.Category == "snack" {
 			SnackItems = append(SnackItems, item)
 		}
 	}
@@ -42,7 +42,7 @@ func SnackItem(wg *sync.WaitGroup) {
 func DessertItem(wg *sync.WaitGroup) {
 	defer wg.Done()
 	for _, item := range Items {
-		if item.Category == "Dessert" {
+		if item.Category == "dessert" {
 			DessertItems = append(DessertItems, item)
 		}
 	}

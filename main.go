@@ -16,7 +16,7 @@ func main() {
 		if option == 1 {
 			menu.MenuCustomer()
 		} else if option == 2 {
-			fmt.Println("Menu Admin")
+			menu.MenuAdmin()
 		} else if option == 3 {
 			fmt.Print("\n[ !!! PROGRAM DIAKHIRI !!! ]\n\n")
 			time.Sleep(2 * time.Second)
