@@ -12,5 +12,3 @@ func AddCartItem(item Item) {
 	fmt.Printf("\n%s berhasil ditambahkan ke dalam keranjang!\n\n", item.Name)
 	time.Sleep(time.Second)
 }
-
-// implementasi goroutines : lakukan pencarian berdasarkan range harga, rating, kategori --> masukkan ke dalam
