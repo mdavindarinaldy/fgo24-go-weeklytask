@@ -28,7 +28,7 @@ func CheckOut() {
 	for {
 		opt := utils.GetInputInt("\nTekan 1 untuk konfirmasi pembayaran\nTekan 2 untuk kembali ke menu utama\nSilakan pilih 1/2 : ")
 		if opt == 1 {
-			fmt.Println("Terima kasih sudah berbelanja")
+			fmt.Println("\nTerima kasih sudah berbelanja")
 			fmt.Println("[ !!! DIKEMBALIKAN KE MENU UTAMA !!! ]")
 			module.AddTransactions()
 			module.EmptyCartItem()
