@@ -22,3 +22,7 @@ func RemoveCartItem(index int) {
 		Cart = append(Cart[:index], Cart[index+1:]...)
 	}
 }
+
+func EmptyCartItem() {
+	Cart = []Item{}
+}
