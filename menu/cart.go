@@ -28,14 +28,11 @@ func ShoppingCart() {
 		} else {
 			fmt.Printf("Pilih 1-%d untuk menghapus item dari Keranjang\n", len(module.Cart))
 		}
-		fmt.Printf("Pilih %d untuk Checkout\n", len(module.Cart)+1)
-		fmt.Printf("Pilih %d untuk kembali ke menu utama\n", len(module.Cart)+2)
-		opt := utils.GetInputInt(fmt.Sprintf("Silahkan pilih 1-%d : ", len(module.Cart)+2))
-		if opt < 1 || opt > len(module.Cart)+2 {
+		fmt.Printf("Pilih %d untuk kembali ke menu utama\n", len(module.Cart)+1)
+		opt := utils.GetInputInt(fmt.Sprintf("Silahkan pilih 1-%d : ", len(module.Cart)+1))
+		if opt < 1 || opt > len(module.Cart)+1 {
 			utils.InvalidInput()
 		} else if opt == len(module.Cart)+1 {
-			CheckOut()
-		} else if opt == len(module.Cart)+2 {
 			return
 		} else {
 			module.RemoveCartItem(opt)
