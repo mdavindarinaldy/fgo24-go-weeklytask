@@ -21,7 +21,7 @@ func MenuAdmin() {
 		if option == 1 {
 			AddItemMenu()
 		} else if option == 2 {
-			fmt.Println("hapus menu")
+			RemoveItemMenu()
 		} else if option == 3 {
 			DisplayTransactions()
 		} else if option == 4 {
@@ -74,7 +74,34 @@ func AddItemMenu() {
 }
 
 func RemoveItemMenu() {
-
+	fmt.Print("\033[H\033[2J")
+	fmt.Println("Hapus Item :")
+	for i, item := range module.Items {
+		fmt.Printf("%d. %s - %s - Rp.%d\n", i+1, item.Name, item.Category, item.Price)
+	}
+	for {
+		if len(module.Cart) == 1 {
+			fmt.Print("Item menu tersisa satu dan tidak boleh dihapus agar menu tidak kosong! Silahkan tambahkan item terlebih dahulu untuk menghapus\n")
+			fmt.Printf("\n[DIKEMBALIKAN KE MENU UTAMA]\n\n")
+			time.Sleep(2 * time.Second)
+			return
+		} else {
+			fmt.Printf("Pilih 1-%d untuk menghapus item dari Keranjang\n", len(module.Items))
+		}
+		fmt.Printf("Pilih %d untuk kembali ke menu utama\n", len(module.Items)+1)
+		opt := utils.GetInputInt(fmt.Sprintf("Silahkan pilih 1-%d : ", len(module.Items)+1))
+		if opt < 1 || opt > len(module.Items)+1 {
+			utils.InvalidInput()
+		} else if opt == len(module.Items)+1 {
+			return
+		} else {
+			module.RemoveItemMenu(opt)
+			fmt.Println("\nItem berhasil dihapus!")
+			fmt.Printf("\n[DIKEMBALIKAN KE MENU UTAMA]\n\n")
+			time.Sleep(2 * time.Second)
+			return
+		}
+	}
 }
 
 func DisplayTransactions() {

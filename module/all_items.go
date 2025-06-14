@@ -97,6 +97,16 @@ func AddItem(item Item) {
 	Items = append(Items, item)
 }
 
+func RemoveItemMenu(index int) {
+	if index == 1 {
+		Items = Items[1:]
+	} else if index == len(Items) {
+		Items = Items[:index-1]
+	} else {
+		Items = append(Items[:index-1], Items[index:]...)
+	}
+}
+
 func CheckItem(name string) bool {
 	for _, item := range Items {
 		if strings.Contains(strings.ToLower(item.Name), strings.ToLower(name)) {
