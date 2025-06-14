@@ -2,41 +2,66 @@ package module
 
 import "sync"
 
-var NusantaraItems []Item = []Item{}
-var WesternItems []Item = []Item{}
-var JapaneseItems []Item = []Item{}
+type MenuByOrigin struct {
+	nusantaraItems []Item
+	westernItems   []Item
+	japaneseItems  []Item
+}
 
-func NusantaraItem(wg *sync.WaitGroup) {
+func NewMenuByOrigin() *MenuByOrigin {
+	return &MenuByOrigin{
+		nusantaraItems: []Item{},
+		westernItems:   []Item{},
+		japaneseItems:  []Item{},
+	}
+}
+
+func (mo *MenuByOrigin) FilterNusantara(wg *sync.WaitGroup, menu *Menu) {
 	defer wg.Done()
-	for _, item := range Items {
+	mo.nusantaraItems = []Item{}
+	for _, item := range menu.GetAll() {
 		if item.Origin == "nusantara" {
-			NusantaraItems = append(NusantaraItems, item)
+			mo.nusantaraItems = append(mo.nusantaraItems, item)
 		}
 	}
 }
 
-func WesternItem(wg *sync.WaitGroup) {
+func (mo *MenuByOrigin) FilterWestern(wg *sync.WaitGroup, menu *Menu) {
 	defer wg.Done()
-	for _, item := range Items {
+	mo.westernItems = []Item{}
+	for _, item := range menu.GetAll() {
 		if item.Origin == "western" {
-			WesternItems = append(WesternItems, item)
+			mo.westernItems = append(mo.westernItems, item)
 		}
 	}
 }
 
-func JapaneseItem(wg *sync.WaitGroup) {
+func (mo *MenuByOrigin) FilterJapanese(wg *sync.WaitGroup, menu *Menu) {
 	defer wg.Done()
-	for _, item := range Items {
+	mo.japaneseItems = []Item{}
+	for _, item := range menu.GetAll() {
 		if item.Origin == "japanese" {
-			JapaneseItems = append(JapaneseItems, item)
+			mo.japaneseItems = append(mo.japaneseItems, item)
 		}
 	}
 }
 
-func EmptyItemByOrigin(wg *sync.WaitGroup) {
+// CHECK INI JUGAAA
+func (mo *MenuByOrigin) EmptyItems(wg *sync.WaitGroup) {
 	defer wg.Done()
-	FoodItems = []Item{}
-	DrinkItems = []Item{}
-	SnackItems = []Item{}
-	DessertItems = []Item{}
+	mo.nusantaraItems = []Item{}
+	mo.westernItems = []Item{}
+	mo.japaneseItems = []Item{}
+}
+
+func (mo *MenuByOrigin) GetNusantaraItems() []Item {
+	return mo.nusantaraItems
+}
+
+func (mo *MenuByOrigin) GetWesternItems() []Item {
+	return mo.westernItems
+}
+
+func (mo *MenuByOrigin) GetJapaneseItems() []Item {
+	return mo.japaneseItems
 }

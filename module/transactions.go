@@ -1,45 +1,61 @@
 package module
 
-var Transactions []Item = []Item{}
-
 type SummaryTransaction struct {
 	Order int
 	Name  string
 	Price int
 }
 
-var SummaryTransactions []SummaryTransaction = []SummaryTransaction{}
+type TransactionManager struct {
+	transaction        []Item
+	summaryTransaction []SummaryTransaction
+}
 
-func checkItem(transaction []SummaryTransaction, Name string) (bool, int) {
-	for i := range transaction {
-		if transaction[i].Name == Name {
+func NewTransactionManager() *TransactionManager {
+	return &TransactionManager{
+		transaction:        []Item{},
+		summaryTransaction: []SummaryTransaction{},
+	}
+}
+
+func (t *TransactionManager) Add(items []Item) {
+	t.transaction = append(t.transaction, items...)
+}
+
+func (t *TransactionManager) CheckSummary(name string) (bool, int) {
+	for i, transaction := range t.summaryTransaction {
+		if transaction.Name == name {
 			return true, i
 		}
 	}
 	return false, 0
 }
 
-func SortTransactions() {
-	for _, item := range Transactions {
-		check, index := checkItem(SummaryTransactions, item.Name)
-		if len(SummaryTransactions) == 0 {
-			SummaryTransactions = append(SummaryTransactions, SummaryTransaction{
+func (t *TransactionManager) GetAll() []Item {
+	return t.transaction
+}
+
+func (t *TransactionManager) GetSummary() []SummaryTransaction {
+	return t.summaryTransaction
+}
+
+func (t *TransactionManager) SortTransaction() {
+	for _, item := range t.transaction {
+		check, index := t.CheckSummary(item.Name)
+		if len(t.summaryTransaction) == 0 {
+			t.summaryTransaction = append(t.summaryTransaction, SummaryTransaction{
 				Order: 1,
 				Name:  item.Name,
 				Price: item.Price,
 			})
 		} else if check {
-			SummaryTransactions[index].Order = SummaryTransactions[index].Order + 1
+			t.summaryTransaction[index].Order = t.summaryTransaction[index].Order + 1
 		} else {
-			SummaryTransactions = append(SummaryTransactions, SummaryTransaction{
+			t.summaryTransaction = append(t.summaryTransaction, SummaryTransaction{
 				Order: 1,
 				Name:  item.Name,
 				Price: item.Price,
 			})
 		}
 	}
-}
-
-func AddTransactions() {
-	Transactions = append(Transactions, Cart...)
 }

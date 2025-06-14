@@ -4,54 +4,83 @@ import (
 	"sync"
 )
 
-var FoodItems []Item = []Item{}
+type MenuByCategory struct {
+	foodItems    []Item
+	drinkItems   []Item
+	snackItems   []Item
+	dessertItems []Item
+}
 
-var DrinkItems []Item = []Item{}
+func NewMenuByCategory() *MenuByCategory {
+	return &MenuByCategory{
+		foodItems:    []Item{},
+		drinkItems:   []Item{},
+		snackItems:   []Item{},
+		dessertItems: []Item{},
+	}
+}
 
-var SnackItems []Item = []Item{}
-
-var DessertItems []Item = []Item{}
-
-func FoodItem(wg *sync.WaitGroup) {
+func (mc *MenuByCategory) FilterFood(wg *sync.WaitGroup, menu *Menu) {
 	defer wg.Done()
-	for _, item := range Items {
+	mc.foodItems = []Item{}
+	for _, item := range menu.GetAll() {
 		if item.Category == "food" {
-			FoodItems = append(FoodItems, item)
+			mc.foodItems = append(mc.foodItems, item)
 		}
 	}
 }
 
-func DrinkItem(wg *sync.WaitGroup) {
+func (mc *MenuByCategory) FilterDrink(wg *sync.WaitGroup, menu *Menu) {
 	defer wg.Done()
-	for _, item := range Items {
+	mc.drinkItems = []Item{}
+	for _, item := range menu.GetAll() {
 		if item.Category == "drink" {
-			DrinkItems = append(DrinkItems, item)
+			mc.drinkItems = append(mc.drinkItems, item)
 		}
 	}
 }
 
-func SnackItem(wg *sync.WaitGroup) {
+func (mc *MenuByCategory) FilterSnack(wg *sync.WaitGroup, menu *Menu) {
 	defer wg.Done()
-	for _, item := range Items {
+	mc.snackItems = []Item{}
+	for _, item := range menu.GetAll() {
 		if item.Category == "snack" {
-			SnackItems = append(SnackItems, item)
+			mc.snackItems = append(mc.snackItems, item)
 		}
 	}
 }
 
-func DessertItem(wg *sync.WaitGroup) {
+func (mc *MenuByCategory) FilterDessert(wg *sync.WaitGroup, menu *Menu) {
 	defer wg.Done()
-	for _, item := range Items {
+	mc.dessertItems = []Item{}
+	for _, item := range menu.GetAll() {
 		if item.Category == "dessert" {
-			DessertItems = append(DessertItems, item)
+			mc.dessertItems = append(mc.dessertItems, item)
 		}
 	}
 }
 
-func EmptyItemByCategory(wg *sync.WaitGroup) {
+// CHECK INI JUGAAA
+func (mc *MenuByCategory) EmptyItems(wg *sync.WaitGroup) {
 	defer wg.Done()
-	FoodItems = []Item{}
-	DrinkItems = []Item{}
-	SnackItems = []Item{}
-	DessertItems = []Item{}
+	mc.foodItems = []Item{}
+	mc.drinkItems = []Item{}
+	mc.snackItems = []Item{}
+	mc.dessertItems = []Item{}
+}
+
+func (mc *MenuByCategory) GetFoodItems() []Item {
+	return mc.foodItems
+}
+
+func (mc *MenuByCategory) GetDrinkItems() []Item {
+	return mc.drinkItems
+}
+
+func (mc *MenuByCategory) GetSnackItems() []Item {
+	return mc.snackItems
+}
+
+func (mc *MenuByCategory) GetDessertItems() []Item {
+	return mc.dessertItems
 }

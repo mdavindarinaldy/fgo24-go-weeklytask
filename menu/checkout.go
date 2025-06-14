@@ -7,11 +7,12 @@ import (
 	"time"
 )
 
-func CheckOut() {
+func CheckOut(cart *module.CartManager, transactions *module.TransactionManager) {
 	fmt.Print("\033[H\033[2J")
 	fmt.Println("Checkout :")
 
-	if len(module.Cart) == 0 {
+	items := cart.GetAll()
+	if len(items) == 0 {
 		fmt.Println("Belum ada item yang dimasukkan ke dalam keranjang!")
 		fmt.Printf("\n[DIKEMBALIKAN KE MENU UTAMA]\n\n")
 		time.Sleep(2 * time.Second)
@@ -19,7 +20,7 @@ func CheckOut() {
 	}
 
 	var totalPrice int = 0
-	for i, item := range module.Cart {
+	for i, item := range items {
 		fmt.Printf("%d. %s - Rp.%d\n", i+1, item.Name, item.Price)
 		totalPrice = totalPrice + item.Price
 	}
@@ -30,8 +31,8 @@ func CheckOut() {
 		if opt == 1 {
 			fmt.Println("\nTerima kasih sudah berbelanja")
 			fmt.Println("[ !!! DIKEMBALIKAN KE MENU UTAMA !!! ]")
-			module.AddTransactions()
-			module.EmptyCartItem()
+			transactions.Add(cart.GetAll())
+			cart.EmptyCart()
 			time.Sleep(time.Second)
 			return
 		} else if opt == 2 {

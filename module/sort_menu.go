@@ -5,21 +5,34 @@ import (
 	"sync"
 )
 
-var SortedItem []Item = Items
+type SortedMenu struct {
+	items []Item
+}
 
-func SortAscend() {
-	sort.SliceStable(SortedItem, func(i, j int) bool {
-		return SortedItem[i].Price < SortedItem[j].Price
+func NewSortedMenu(menu *Menu) *SortedMenu {
+	return &SortedMenu{
+		items: menu.GetAll(),
+	}
+}
+
+func (sm *SortedMenu) SortAscend() {
+	sort.SliceStable(sm.items, func(i, j int) bool {
+		return sm.items[i].Price < sm.items[j].Price
 	})
 }
 
-func SortDescend() {
-	sort.SliceStable(SortedItem, func(i, j int) bool {
-		return SortedItem[i].Price > SortedItem[j].Price
+func (sm *SortedMenu) SortDescend() {
+	sort.SliceStable(sm.items, func(i, j int) bool {
+		return sm.items[i].Price > sm.items[j].Price
 	})
 }
 
-func ResetSortedItem(wg *sync.WaitGroup) {
+// CEK INI YAKKKK UDAH GA BUTUH
+func (sm *SortedMenu) ResetSortedItem(wg *sync.WaitGroup, menu *Menu) {
 	defer wg.Done()
-	SortedItem = Items
+	sm.items = menu.GetAll()
+}
+
+func (sm *SortedMenu) GetSortedItems() []Item {
+	return sm.items
 }
