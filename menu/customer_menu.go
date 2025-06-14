@@ -7,15 +7,21 @@ import (
 	"sync"
 )
 
-func MenuCustomer() {
+func MenuCustomer(menu *module.Menu, transactions *module.TransactionManager) {
+	cart := module.NewCartManager()
+	sortedMenu := module.NewSortedMenu(menu)
+	menuByOrigin := module.NewMenuByOrigin()
+	menuByCategory := module.NewMenuByCategory()
+
 	for {
 		fmt.Print("\033[H\033[2J")
 		wait := sync.WaitGroup{}
 		wait.Add(3)
-		go module.EmptyItemByCategory(&wait)
-		go module.EmptyItemByOrigin(&wait)
-		go module.ResetSortedItem(&wait)
+		go menuByCategory.EmptyItems(&wait)
+		go menuByOrigin.EmptyItems(&wait)
+		go sortedMenu.ResetSortedItem(&wait, menu)
 		wait.Wait()
+
 		fmt.Println("----------MENU UTAMA----------")
 		fmt.Println("1. Lihat menu berdasarkan kategori")
 		fmt.Println("2. Lihat menu berdasarkan tipe hidangan")
@@ -26,17 +32,17 @@ func MenuCustomer() {
 		fmt.Println("7. Logout")
 		option := utils.GetInputInt("Silakan pilih menu [1-7] : ")
 		if option == 1 {
-			MenuByCategory()
+			MenuByCategory(menu, cart, menuByCategory)
 		} else if option == 2 {
-			MenuByOrigin()
+			MenuByOrigin(menu, cart, menuByOrigin)
 		} else if option == 3 {
-			SortAscendMenu()
+			SortAscendMenu(cart, sortedMenu)
 		} else if option == 4 {
-			SortDescendMenu()
+			SortDescendMenu(cart, sortedMenu)
 		} else if option == 5 {
-			ShoppingCart()
+			ShoppingCart(cart)
 		} else if option == 6 {
-			CheckOut()
+			CheckOut(cart, transactions)
 		} else if option == 7 {
 			return
 		} else {
@@ -45,13 +51,13 @@ func MenuCustomer() {
 	}
 }
 
-func MenuByCategory() {
+func MenuByCategory(menu *module.Menu, cart *module.CartManager, menuByCategory *module.MenuByCategory) {
 	wait := sync.WaitGroup{}
 	wait.Add(4)
-	go module.FoodItem(&wait)
-	go module.DrinkItem(&wait)
-	go module.SnackItem(&wait)
-	go module.DessertItem(&wait)
+	go menuByCategory.FilterFood(&wait, menu)
+	go menuByCategory.FilterDrink(&wait, menu)
+	go menuByCategory.FilterSnack(&wait, menu)
+	go menuByCategory.FilterDessert(&wait, menu)
 	wait.Wait()
 
 	for {
@@ -64,13 +70,13 @@ func MenuByCategory() {
 		fmt.Println("5. Kembali ke Menu Utama")
 		option := utils.GetInputInt("Silakan pilih menu [1-5] : ")
 		if option == 1 {
-			FoodsMenu()
+			FoodsMenu(cart, menuByCategory)
 		} else if option == 2 {
-			DrinksMenu()
+			DrinksMenu(cart, menuByCategory)
 		} else if option == 3 {
-			SnacksMenu()
+			SnacksMenu(cart, menuByCategory)
 		} else if option == 4 {
-			DessertsMenu()
+			DessertsMenu(cart, menuByCategory)
 		} else if option == 5 {
 			return
 		} else {
@@ -79,12 +85,12 @@ func MenuByCategory() {
 	}
 }
 
-func MenuByOrigin() {
+func MenuByOrigin(menu *module.Menu, cart *module.CartManager, menuByOrigin *module.MenuByOrigin) {
 	wait := sync.WaitGroup{}
 	wait.Add(3)
-	go module.NusantaraItem(&wait)
-	go module.WesternItem(&wait)
-	go module.JapaneseItem(&wait)
+	go menuByOrigin.FilterNusantara(&wait, menu)
+	go menuByOrigin.FilterWestern(&wait, menu)
+	go menuByOrigin.FilterJapanese(&wait, menu)
 	wait.Wait()
 
 	for {
@@ -96,11 +102,11 @@ func MenuByOrigin() {
 		fmt.Println("4. Kembali ke Menu Utama")
 		option := utils.GetInputInt("Silakan pilih menu [1-4] : ")
 		if option == 1 {
-			NusantaraMenu()
+			NusantaraMenu(cart, menuByOrigin)
 		} else if option == 2 {
-			WesternMenu()
+			WesternMenu(cart, menuByOrigin)
 		} else if option == 3 {
-			JapaneseMenu()
+			JapaneseMenu(cart, menuByOrigin)
 		} else if option == 4 {
 			return
 		} else {
@@ -109,175 +115,184 @@ func MenuByOrigin() {
 	}
 }
 
-func FoodsMenu() {
+func FoodsMenu(cart *module.CartManager, menuByCategory *module.MenuByCategory) {
 	fmt.Print("\033[H\033[2J")
 	fmt.Println("Menu Makanan :")
-	len := len(module.FoodItems)
-	for i, item := range module.FoodItems {
+	items := menuByCategory.GetFoodItems()
+	len := len(items)
+	for i, item := range items {
 		fmt.Printf("%d. %s : Rp.%d\n", i+1, item.Name, item.Price)
 	}
 	fmt.Printf("%d. Kembali ke Menu Sebelumnya\n", len+1)
 	option := utils.GetInputInt("Silakan pilih menu dengan memilih angka : ")
 	if option < 1 || option > len+1 {
 		utils.InvalidInput()
-		FoodsMenu()
+		FoodsMenu(cart, menuByCategory)
 	} else if option == len+1 {
 		return
 	} else {
-		module.AddCartItem(module.FoodItems[option-1])
+		cart.Add(items[option-1])
 	}
 }
 
-func DrinksMenu() {
+func DrinksMenu(cart *module.CartManager, menuByCategory *module.MenuByCategory) {
 	fmt.Print("\033[H\033[2J")
 	fmt.Println("Menu Minuman :")
-	len := len(module.DrinkItems)
-	for i, item := range module.DrinkItems {
+	items := menuByCategory.GetDrinkItems()
+	len := len(items)
+	for i, item := range items {
 		fmt.Printf("%d. %s : Rp.%d\n", i+1, item.Name, item.Price)
 	}
 	fmt.Printf("%d. Kembali ke Menu Sebelumnya\n", len+1)
 	option := utils.GetInputInt("Silakan pilih menu dengan memilih angka : ")
 	if option < 1 || option > len+1 {
 		fmt.Println("Input tidak valid! Silakan coba lagi")
-		DrinksMenu()
+		DrinksMenu(cart, menuByCategory)
 	} else if option == len+1 {
 		return
 	} else {
-		module.AddCartItem(module.DrinkItems[option-1])
+		cart.Add(items[option-1])
 	}
 }
 
-func SnacksMenu() {
+func SnacksMenu(cart *module.CartManager, menuByCategory *module.MenuByCategory) {
 	fmt.Print("\033[H\033[2J")
 	fmt.Println("Menu Snacks :")
-	len := len(module.SnackItems)
-	for i, item := range module.SnackItems {
+	items := menuByCategory.GetSnackItems()
+	len := len(items)
+	for i, item := range items {
 		fmt.Printf("%d. %s : Rp.%d\n", i+1, item.Name, item.Price)
 	}
 	fmt.Printf("%d. Kembali ke Menu Sebelumnya\n", len+1)
 	option := utils.GetInputInt("Silakan pilih menu dengan memilih angka : ")
 	if option < 1 || option > len+1 {
 		utils.InvalidInput()
-		SnacksMenu()
+		SnacksMenu(cart, menuByCategory)
 	} else if option == len+1 {
 		return
 	} else {
-		module.AddCartItem(module.SnackItems[option-1])
+		cart.Add(items[option-1])
 	}
 }
 
-func DessertsMenu() {
+func DessertsMenu(cart *module.CartManager, menuByCategory *module.MenuByCategory) {
 	fmt.Print("\033[H\033[2J")
 	fmt.Println("Menu Desserts :")
-	len := len(module.DessertItems)
-	for i, item := range module.DessertItems {
+	items := menuByCategory.GetSnackItems()
+	len := len(items)
+	for i, item := range items {
 		fmt.Printf("%d. %s : Rp.%d\n", i+1, item.Name, item.Price)
 	}
 	fmt.Printf("%d. Kembali ke Menu Sebelumnya\n", len+1)
 	option := utils.GetInputInt("Silakan pilih menu dengan memilih angka : ")
 	if option < 1 || option > len+1 {
 		utils.InvalidInput()
-		DessertsMenu()
+		DessertsMenu(cart, menuByCategory)
 	} else if option == len+1 {
 		return
 	} else {
-		module.AddCartItem(module.DessertItems[option-1])
+		cart.Add(items[option-1])
 	}
 }
 
-func NusantaraMenu() {
+func NusantaraMenu(cart *module.CartManager, menuByOrigin *module.MenuByOrigin) {
 	fmt.Print("\033[H\033[2J")
 	fmt.Println("Hidangan Nusantara :")
-	len := len(module.NusantaraItems)
-	for i, item := range module.NusantaraItems {
+	items := menuByOrigin.GetNusantaraItems()
+	len := len(items)
+	for i, item := range items {
 		fmt.Printf("%d. %s : Rp.%d\n", i+1, item.Name, item.Price)
 	}
 	fmt.Printf("%d. Kembali ke Menu Sebelumnya\n", len+1)
 	option := utils.GetInputInt("Silakan pilih menu dengan memilih angka : ")
 	if option < 1 || option > len+1 {
 		utils.InvalidInput()
-		NusantaraMenu()
+		NusantaraMenu(cart, menuByOrigin)
 	} else if option == len+1 {
 		return
 	} else {
-		module.AddCartItem(module.NusantaraItems[option-1])
+		cart.Add(items[option-1])
 	}
 }
 
-func WesternMenu() {
+func WesternMenu(cart *module.CartManager, menuByOrigin *module.MenuByOrigin) {
 	fmt.Print("\033[H\033[2J")
 	fmt.Println("Hidangan Nusantara :")
-	len := len(module.WesternItems)
-	for i, item := range module.WesternItems {
+	items := menuByOrigin.GetWesternItems()
+	len := len(items)
+	for i, item := range items {
 		fmt.Printf("%d. %s : Rp.%d\n", i+1, item.Name, item.Price)
 	}
 	fmt.Printf("%d. Kembali ke Menu Sebelumnya\n", len+1)
 	option := utils.GetInputInt("Silakan pilih menu dengan memilih angka : ")
 	if option < 1 || option > len+1 {
 		utils.InvalidInput()
-		WesternMenu()
+		WesternMenu(cart, menuByOrigin)
 	} else if option == len+1 {
 		return
 	} else {
-		module.AddCartItem(module.WesternItems[option-1])
+		cart.Add(items[option-1])
 	}
 }
 
-func JapaneseMenu() {
+func JapaneseMenu(cart *module.CartManager, menuByOrigin *module.MenuByOrigin) {
 	fmt.Print("\033[H\033[2J")
 	fmt.Println("Hidangan Nusantara :")
-	len := len(module.JapaneseItems)
-	for i, item := range module.JapaneseItems {
+	items := menuByOrigin.GetJapaneseItems()
+	len := len(items)
+	for i, item := range items {
 		fmt.Printf("%d. %s : Rp.%d\n", i+1, item.Name, item.Price)
 	}
 	fmt.Printf("%d. Kembali ke Menu Sebelumnya\n", len+1)
 	option := utils.GetInputInt("Silakan pilih menu dengan memilih angka : ")
 	if option < 1 || option > len+1 {
 		utils.InvalidInput()
-		JapaneseMenu()
+		JapaneseMenu(cart, menuByOrigin)
 	} else if option == len+1 {
 		return
 	} else {
-		module.AddCartItem(module.JapaneseItems[option-1])
+		cart.Add(items[option-1])
 	}
 }
 
-func SortAscendMenu() {
-	module.SortAscend()
+func SortAscendMenu(cart *module.CartManager, sortedMenu *module.SortedMenu) {
+	sortedMenu.SortAscend()
 	fmt.Print("\033[H\033[2J")
 	fmt.Println("List menu dari harga terrendah ke tertinggi : ")
-	len := len(module.SortedItem)
-	for i, item := range module.SortedItem {
+	items := sortedMenu.GetSortedItems()
+	len := len(items)
+	for i, item := range items {
 		fmt.Printf("%d. %s : Rp.%d\n", i+1, item.Name, item.Price)
 	}
 	fmt.Printf("%d. Kembali ke Menu Sebelumnya\n", len+1)
 	option := utils.GetInputInt("Silakan pilih menu dengan memilih angka : ")
 	if option < 1 || option > len+1 {
 		utils.InvalidInput()
-		SortAscendMenu()
+		SortAscendMenu(cart, sortedMenu)
 	} else if option == len+1 {
 		return
 	} else {
-		module.AddCartItem(module.SortedItem[option-1])
+		cart.Add(items[option-1])
 	}
 }
 
-func SortDescendMenu() {
-	module.SortDescend()
+func SortDescendMenu(cart *module.CartManager, sortedMenu *module.SortedMenu) {
+	sortedMenu.SortDescend()
 	fmt.Print("\033[H\033[2J")
 	fmt.Println("List menu dari harga tertinggi ke terrendah : ")
-	len := len(module.SortedItem)
-	for i, item := range module.SortedItem {
+	items := sortedMenu.GetSortedItems()
+	len := len(items)
+	for i, item := range items {
 		fmt.Printf("%d. %s : Rp.%d\n", i+1, item.Name, item.Price)
 	}
 	fmt.Printf("%d. Kembali ke Menu Sebelumnya\n", len+1)
 	option := utils.GetInputInt("Silakan pilih menu dengan memilih angka : ")
 	if option < 1 || option > len+1 {
 		utils.InvalidInput()
-		SortDescendMenu()
+		SortDescendMenu(cart, sortedMenu)
 	} else if option == len+1 {
 		return
 	} else {
-		module.AddCartItem(module.SortedItem[option-1])
+		cart.Add(items[option-1])
 	}
 }
