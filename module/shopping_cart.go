@@ -19,7 +19,7 @@ func RemoveCartItem(index int) {
 	} else if index == len(Cart) {
 		Cart = Cart[:index-1]
 	} else {
-		Cart = append(Cart[:index], Cart[index+1:]...)
+		Cart = append(Cart[:index-1], Cart[index:]...)
 	}
 }
 

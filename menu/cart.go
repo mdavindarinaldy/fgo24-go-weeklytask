@@ -14,7 +14,7 @@ func ShoppingCart() {
 		fmt.Println("Belum ada item yang dimasukkan ke dalam keranjang!")
 		fmt.Printf("\n[DIKEMBALIKAN KE MENU UTAMA]\n\n")
 		time.Sleep(2 * time.Second)
-		MenuCustomer()
+		return
 	}
 	var totalPrice int = 0
 	for i, item := range module.Cart {
@@ -36,7 +36,10 @@ func ShoppingCart() {
 			return
 		} else {
 			module.RemoveCartItem(opt)
-			ShoppingCart()
+			fmt.Println("Item berhasil dihapus!")
+			fmt.Printf("\n[DIKEMBALIKAN KE MENU UTAMA]\n\n")
+			time.Sleep(2 * time.Second)
+			return
 		}
 	}
 }
