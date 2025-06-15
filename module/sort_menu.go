@@ -27,7 +27,6 @@ func (sm *SortedMenu) SortDescend() {
 	})
 }
 
-// CEK INI YAKKKK UDAH GA BUTUH
 func (sm *SortedMenu) ResetSortedItem(wg *sync.WaitGroup, menu *Menu) {
 	defer wg.Done()
 	sm.items = menu.GetAll()

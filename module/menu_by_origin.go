@@ -46,7 +46,6 @@ func (mo *MenuByOrigin) FilterJapanese(wg *sync.WaitGroup, menu *Menu) {
 	}
 }
 
-// CHECK INI JUGAAA
 func (mo *MenuByOrigin) EmptyItems(wg *sync.WaitGroup) {
 	defer wg.Done()
 	mo.nusantaraItems = []Item{}

@@ -60,7 +60,6 @@ func (mc *MenuByCategory) FilterDessert(wg *sync.WaitGroup, menu *Menu) {
 	}
 }
 
-// CHECK INI JUGAAA
 func (mc *MenuByCategory) EmptyItems(wg *sync.WaitGroup) {
 	defer wg.Done()
 	mc.foodItems = []Item{}
