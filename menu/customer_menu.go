@@ -5,6 +5,7 @@ import (
 	"fgo24-weekly-go/utils"
 	"fmt"
 	"sync"
+	"time"
 )
 
 func MenuCustomer(menu *module.Menu, transactions *module.TransactionManager) {
@@ -27,9 +28,10 @@ func MenuCustomer(menu *module.Menu, transactions *module.TransactionManager) {
 		fmt.Println("2. Lihat menu berdasarkan tipe hidangan")
 		fmt.Println("3. Lihat menu berdasarkan harga terrendah")
 		fmt.Println("4. Lihat menu berdasarkan harga tertinggi")
-		fmt.Println("5. Lihat keranjang")
-		fmt.Println("6. Checkout")
-		fmt.Println("7. Logout")
+		fmt.Println("5. Cari menu")
+		fmt.Println("6. Lihat keranjang")
+		fmt.Println("7. Checkout")
+		fmt.Println("8. Logout")
 		option := utils.GetInputInt("Silakan pilih menu [1-7] : ")
 		if option == 1 {
 			MenuByCategory(menu, cart, menuByCategory)
@@ -40,10 +42,12 @@ func MenuCustomer(menu *module.Menu, transactions *module.TransactionManager) {
 		} else if option == 4 {
 			SortDescendMenu(cart, sortedMenu)
 		} else if option == 5 {
-			ShoppingCart(cart)
+			SearchMenu(cart, menu)
 		} else if option == 6 {
-			CheckOut(cart, transactions)
+			ShoppingCart(cart)
 		} else if option == 7 {
+			CheckOut(cart, transactions)
+		} else if option == 8 {
 			return
 		} else {
 			utils.InvalidInput()
@@ -294,5 +298,31 @@ func SortDescendMenu(cart *module.CartManager, sortedMenu *module.SortedMenu) {
 		return
 	} else {
 		cart.Add(items[option-1])
+	}
+}
+
+func SearchMenu(cart *module.CartManager, menu *module.Menu) {
+	fmt.Print("\033[H\033[2J")
+	search := utils.GetInputString("Silahkan masukkan nama menu yang dicari: ")
+	found := menu.Search(search)
+	if len(found) == 0 {
+		fmt.Printf("\nTidak ada menu dengan nama %s\n", search)
+		fmt.Printf("\n[DIKEMBALIKAN KE MENU UTAMA]\n\n")
+		time.Sleep(2 * time.Second)
+	} else {
+		fmt.Printf("\nJumlah item yang ditemukan : %d\n", len(found))
+		for i, item := range found {
+			fmt.Printf("%d. %s : Rp.%d\n", i+1, item.Name, item.Price)
+		}
+		fmt.Printf("%d. Kembali ke Menu Sebelumnya\n", len(found)+1)
+		option := utils.GetInputInt("Silakan pilih menu dengan memilih angka : ")
+		if option < 1 || option > len(found)+1 {
+			utils.InvalidInput()
+			SearchMenu(cart, menu)
+		} else if option == len(found)+1 {
+			return
+		} else {
+			cart.Add(found[option-1])
+		}
 	}
 }

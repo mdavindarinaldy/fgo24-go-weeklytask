@@ -134,3 +134,13 @@ func (m *Menu) Check(name string) bool {
 func (m *Menu) GetAll() []Item {
 	return m.items
 }
+
+func (m *Menu) Search(name string) []Item {
+	found := []Item{}
+	for _, item := range m.items {
+		if strings.Contains(strings.ToLower(item.Name), strings.ToLower(name)) {
+			found = append(found, item)
+		}
+	}
+	return found
+}
