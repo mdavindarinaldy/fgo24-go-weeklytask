@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	menus := module.NewMenu()
+	var menus module.ItemManager = module.NewMenu()
 	transactions := module.NewTransactionManager()
 
 	for {
@@ -20,7 +20,7 @@ func main() {
 		if option == 1 {
 			menu.MenuCustomer(menus, transactions)
 		} else if option == 2 {
-			menu.MenuAdmin(menus, transactions)
+			menu.MenuAdmin(menus.(*module.Menu), transactions)
 		} else if option == 3 {
 			fmt.Print("\n[ !!! PROGRAM DIAKHIRI !!! ]\n\n")
 			time.Sleep(2 * time.Second)

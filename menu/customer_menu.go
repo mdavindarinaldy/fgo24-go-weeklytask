@@ -8,9 +8,9 @@ import (
 	"time"
 )
 
-func MenuCustomer(menu *module.Menu, transactions *module.TransactionManager) {
-	cart := module.NewCartManager()
-	sortedMenu := module.NewSortedMenu(menu)
+func MenuCustomer(menu module.ItemManager, transactions *module.TransactionManager) {
+	var cart module.ItemManager = module.NewCartManager()
+	sortedMenu := module.NewSortedMenu(menu.(*module.Menu))
 	menuByOrigin := module.NewMenuByOrigin()
 	menuByCategory := module.NewMenuByCategory()
 
@@ -20,7 +20,7 @@ func MenuCustomer(menu *module.Menu, transactions *module.TransactionManager) {
 		wait.Add(3)
 		go menuByCategory.EmptyItems(&wait)
 		go menuByOrigin.EmptyItems(&wait)
-		go sortedMenu.ResetSortedItem(&wait, menu)
+		go sortedMenu.ResetSortedItem(&wait, menu.(*module.Menu))
 		wait.Wait()
 
 		fmt.Println("----------MENU UTAMA----------")
@@ -34,19 +34,19 @@ func MenuCustomer(menu *module.Menu, transactions *module.TransactionManager) {
 		fmt.Println("8. Logout")
 		option := utils.GetInputInt("Silakan pilih menu [1-8] : ")
 		if option == 1 {
-			MenuByCategory(menu, cart, menuByCategory)
+			MenuByCategory(menu.(*module.Menu), cart.(*module.CartManager), menuByCategory)
 		} else if option == 2 {
-			MenuByOrigin(menu, cart, menuByOrigin)
+			MenuByOrigin(menu.(*module.Menu), cart.(*module.CartManager), menuByOrigin)
 		} else if option == 3 {
-			SortAscendMenu(cart, sortedMenu)
+			SortAscendMenu(cart.(*module.CartManager), sortedMenu)
 		} else if option == 4 {
-			SortDescendMenu(cart, sortedMenu)
+			SortDescendMenu(cart.(*module.CartManager), sortedMenu)
 		} else if option == 5 {
-			SearchMenu(cart, menu)
+			SearchMenu(cart.(*module.CartManager), menu.(*module.Menu))
 		} else if option == 6 {
-			ShoppingCart(cart)
+			ShoppingCart(cart.(*module.CartManager))
 		} else if option == 7 {
-			CheckOut(cart, transactions)
+			CheckOut(cart.(*module.CartManager), transactions)
 		} else if option == 8 {
 			return
 		} else {
@@ -264,41 +264,19 @@ func SortAscendMenu(cart *module.CartManager, sortedMenu *module.SortedMenu) {
 	fmt.Print("\033[H\033[2J")
 	fmt.Println("List menu dari harga terrendah ke tertinggi : ")
 	items := sortedMenu.GetSortedItems()
-	len := len(items)
 	for i, item := range items {
 		fmt.Printf("%d. %s : Rp.%d\n", i+1, item.Name, item.Price)
 	}
-	fmt.Printf("%d. Kembali ke Menu Sebelumnya\n", len+1)
-	option := utils.GetInputInt("Silakan pilih menu dengan memilih angka : ")
-	if option < 1 || option > len+1 {
-		utils.InvalidInput()
-		SortAscendMenu(cart, sortedMenu)
-	} else if option == len+1 {
-		return
-	} else {
-		cart.Add(items[option-1])
-	}
+	Pagination(items, 1, cart)
 }
 
 func SortDescendMenu(cart *module.CartManager, sortedMenu *module.SortedMenu) {
 	sortedMenu.SortDescend()
-	fmt.Print("\033[H\033[2J")
-	fmt.Println("List menu dari harga tertinggi ke terrendah : ")
 	items := sortedMenu.GetSortedItems()
-	len := len(items)
 	for i, item := range items {
 		fmt.Printf("%d. %s : Rp.%d\n", i+1, item.Name, item.Price)
 	}
-	fmt.Printf("%d. Kembali ke Menu Sebelumnya\n", len+1)
-	option := utils.GetInputInt("Silakan pilih menu dengan memilih angka : ")
-	if option < 1 || option > len+1 {
-		utils.InvalidInput()
-		SortDescendMenu(cart, sortedMenu)
-	} else if option == len+1 {
-		return
-	} else {
-		cart.Add(items[option-1])
-	}
+	Pagination(items, 1, cart)
 }
 
 func SearchMenu(cart *module.CartManager, menu *module.Menu) {

@@ -4,6 +4,7 @@ import (
 	"fgo24-weekly-go/module"
 	"fgo24-weekly-go/utils"
 	"fmt"
+	"math"
 	"strings"
 	"time"
 )
@@ -25,7 +26,7 @@ func MenuAdmin(menu *module.Menu, transactions *module.TransactionManager) {
 		} else if option == 3 {
 			DisplayTransactions(transactions)
 		} else if option == 4 {
-			DisplayAllItems(menu)
+			DisplayAllItems(menu, 1)
 		} else if option == 5 {
 			return
 		} else {
@@ -131,19 +132,63 @@ func DisplayTransactions(transactions *module.TransactionManager) {
 	}
 }
 
-func DisplayAllItems(menu *module.Menu) {
-	fmt.Print("\033[H\033[2J")
+func DisplayAllItems(menu *module.Menu, page int) {
 	items := menu.GetAll()
-	fmt.Printf("Total Item : %d\n\n", len(items))
-	fmt.Println("List semua item menu :")
-	for i, item := range items {
-		fmt.Printf("%d. %s -- %s: Rp.%d\n", i+1, item.Name, item.Origin, item.Price)
+	itemsPerPage := 5
+	startIndex := (page - 1) * itemsPerPage
+	endIndex := startIndex + itemsPerPage
+	totalPages := int(math.Ceil(float64(len(items)) / float64(itemsPerPage)))
+
+	if endIndex > len(items) {
+		endIndex = len(items)
 	}
-	opt := utils.GetInputInt("\nPilih 1 untuk kembali ke menu utama : ")
-	if opt == 1 {
-		return
-	} else {
-		utils.InvalidInput()
-		DisplayAllItems(menu)
+
+	if startIndex >= 0 && startIndex < len(items) {
+		fmt.Print("\033[H\033[2J")
+		fmt.Printf("Total Page: %d --- Total Item: %d --- Page Saat Ini: %d\n\n", totalPages, len(items), page)
+		fmt.Println("LIST SEMUA ITEM")
+		for i, item := range items[startIndex:endIndex] {
+			fmt.Printf("%d. %s -- %s: Rp.%d\n", startIndex+i+1, item.Name, item.Origin, item.Price)
+		}
+		if startIndex == 0 {
+			fmt.Println("\nPilih 1 untuk ke halaman berikutnya")
+			fmt.Println("Pilih 2 untuk kembali ke menu utama")
+			opt := utils.GetInputInt("\nSilakan pilih menu dengan memilih angka : ")
+			if opt == 2 {
+				return
+			} else if opt == 1 {
+				DisplayAllItems(menu, page+1)
+			} else {
+				utils.InvalidInput()
+				DisplayAllItems(menu, page)
+			}
+		} else if endIndex == len(items) {
+			fmt.Println("\nPilih 1 untuk ke halaman sebelumnya")
+			fmt.Println("Pilih 2 untuk kembali ke menu utama")
+			opt := utils.GetInputInt("\nSilakan pilih menu dengan memilih angka : ")
+			if opt == 2 {
+				return
+			} else if opt == 1 {
+				DisplayAllItems(menu, page-1)
+			} else {
+				utils.InvalidInput()
+				DisplayAllItems(menu, page)
+			}
+		} else {
+			fmt.Println("\nPilih 1 untuk ke halaman sebelumnya")
+			fmt.Println("Pilih 2 untuk ke halaman berikutnya")
+			fmt.Println("Pilih 3 untuk kembali ke menu utama")
+			opt := utils.GetInputInt("\nSilakan pilih menu dengan memilih angka : ")
+			if opt == 3 {
+				return
+			} else if opt == 1 {
+				DisplayAllItems(menu, page-1)
+			} else if opt == 2 {
+				DisplayAllItems(menu, page+1)
+			} else {
+				utils.InvalidInput()
+				DisplayAllItems(menu, page)
+			}
+		}
 	}
 }
