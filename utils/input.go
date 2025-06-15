@@ -2,7 +2,6 @@ package utils
 
 import (
 	"fmt"
-	"strings"
 	"time"
 )
 
@@ -17,7 +16,6 @@ func GetInputString(prompt string) string {
 	fmt.Print(prompt)
 	var input string
 	fmt.Scanln(&input)
-	input = strings.ToLower(input)
 	return input
 }
 
