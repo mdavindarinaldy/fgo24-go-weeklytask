@@ -103,6 +103,11 @@ func NewMenu() *Menu {
 				Price:    10000,
 				Origin:   "nusantara",
 				Category: "dessert",
+			}, {
+				Name:     "Klepon",
+				Price:    5000,
+				Origin:   "nusantara",
+				Category: "snack",
 			},
 		},
 	}
