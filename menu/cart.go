@@ -36,11 +36,20 @@ func ShoppingCart(cart *module.CartManager) {
 		} else if opt == len(items)+1 {
 			return
 		} else {
-			cart.Remove(opt)
-			fmt.Println("Item berhasil dihapus!")
-			fmt.Printf("\n[DIKEMBALIKAN KE MENU UTAMA]\n\n")
-			time.Sleep(2 * time.Second)
-			return
+			stringConfirm := fmt.Sprintf("\nApakah yakin ingin menghapus %s dari keranjang?\nPilih 1 untuk konfirmasi menghapus item, masukkan selain 1 untuk membatalkan penghapusan item: ", items[opt-1].Name)
+			confirm := utils.GetInputInt(stringConfirm)
+			if confirm == 1 {
+				cart.Remove(opt)
+				fmt.Println("\nItem berhasil dihapus!")
+				fmt.Printf("\n[DIKEMBALIKAN KE MENU UTAMA]\n\n")
+				time.Sleep(2 * time.Second)
+				return
+			} else {
+				fmt.Println("\nPenghapusan item dibatalkan!")
+				fmt.Printf("\n[DIKEMBALIKAN KE MENU UTAMA]\n\n")
+				time.Sleep(2 * time.Second)
+				return
+			}
 		}
 	}
 }

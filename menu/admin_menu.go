@@ -88,7 +88,7 @@ func RemoveItemMenu(menu *module.Menu) {
 			time.Sleep(2 * time.Second)
 			return
 		} else {
-			fmt.Printf("Pilih 1-%d untuk menghapus item dari Keranjang\n", len(items))
+			fmt.Printf("\nPilih 1-%d untuk menghapus item dari Keranjang\n", len(items))
 		}
 		fmt.Printf("Pilih %d untuk kembali ke menu utama\n", len(items)+1)
 		opt := utils.GetInputInt(fmt.Sprintf("Silahkan pilih 1-%d : ", len(items)+1))
@@ -97,11 +97,20 @@ func RemoveItemMenu(menu *module.Menu) {
 		} else if opt == len(items)+1 {
 			return
 		} else {
-			menu.Remove(opt)
-			fmt.Println("\nItem berhasil dihapus!")
-			fmt.Printf("\n[DIKEMBALIKAN KE MENU UTAMA]\n\n")
-			time.Sleep(2 * time.Second)
-			return
+			stringConfirm := fmt.Sprintf("\nApakah yakin ingin menghapus %s dari menu?\nPilih 1 untuk konfirmasi menghapus item, masukkan selain 1 untuk membatalkan penghapusan item: ", items[opt-1].Name)
+			confirm := utils.GetInputInt(stringConfirm)
+			if confirm == 1 {
+				menu.Remove(opt)
+				fmt.Println("\nItem berhasil dihapus!")
+				fmt.Printf("\n[DIKEMBALIKAN KE MENU UTAMA]\n\n")
+				time.Sleep(2 * time.Second)
+				return
+			} else {
+				fmt.Println("\nPenghapusan item dibatalkan!")
+				fmt.Printf("\n[DIKEMBALIKAN KE MENU UTAMA]\n\n")
+				time.Sleep(2 * time.Second)
+				return
+			}
 		}
 	}
 }
