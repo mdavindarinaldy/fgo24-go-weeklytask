@@ -32,7 +32,7 @@ func MenuCustomer(menu *module.Menu, transactions *module.TransactionManager) {
 		fmt.Println("6. Lihat keranjang")
 		fmt.Println("7. Checkout")
 		fmt.Println("8. Logout")
-		option := utils.GetInputInt("Silakan pilih menu [1-7] : ")
+		option := utils.GetInputInt("Silakan pilih menu [1-8] : ")
 		if option == 1 {
 			MenuByCategory(menu, cart, menuByCategory)
 		} else if option == 2 {
@@ -182,7 +182,7 @@ func SnacksMenu(cart *module.CartManager, menuByCategory *module.MenuByCategory)
 func DessertsMenu(cart *module.CartManager, menuByCategory *module.MenuByCategory) {
 	fmt.Print("\033[H\033[2J")
 	fmt.Println("Menu Desserts :")
-	items := menuByCategory.GetSnackItems()
+	items := menuByCategory.GetDessertItems()
 	len := len(items)
 	for i, item := range items {
 		fmt.Printf("%d. %s : Rp.%d\n", i+1, item.Name, item.Price)
@@ -221,7 +221,7 @@ func NusantaraMenu(cart *module.CartManager, menuByOrigin *module.MenuByOrigin) 
 
 func WesternMenu(cart *module.CartManager, menuByOrigin *module.MenuByOrigin) {
 	fmt.Print("\033[H\033[2J")
-	fmt.Println("Hidangan Nusantara :")
+	fmt.Println("Hidangan Western :")
 	items := menuByOrigin.GetWesternItems()
 	len := len(items)
 	for i, item := range items {
@@ -241,7 +241,7 @@ func WesternMenu(cart *module.CartManager, menuByOrigin *module.MenuByOrigin) {
 
 func JapaneseMenu(cart *module.CartManager, menuByOrigin *module.MenuByOrigin) {
 	fmt.Print("\033[H\033[2J")
-	fmt.Println("Hidangan Nusantara :")
+	fmt.Println("Hidangan Japanese :")
 	items := menuByOrigin.GetJapaneseItems()
 	len := len(items)
 	for i, item := range items {
